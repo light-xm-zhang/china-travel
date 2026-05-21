@@ -21,24 +21,31 @@
     // 1. Load Data
     // =========================================================================
     function loadCityData(callback) {
+        // Fast path: data embedded via <script> tag — no network request needed
+        if (window.__EMBEDDED_CITIES__) {
+            var data = window.__EMBEDDED_CITIES__;
+            featuredCities = data.filter(function(c) { return c.featured; });
+            regionalCities = data.filter(function(c) { return !c.featured; });
+            allCities = data;
+            buildSearchIndex();
+            console.log('City data from embed: ' + allCities.length + ' cities');
+            if (callback) setTimeout(callback, 0);
+            return;
+        }
+
+        // Fallback: fetch from JSON file
         fetch('data/cities.json')
             .then(function (r) { return r.json(); })
             .then(function (data) {
-                // Combine featured cities and regional cities
                 featuredCities = data.cities || [];
                 regionalCities = data._regional || [];
                 allCities = featuredCities.concat(regionalCities);
-
-                // Build search index
                 buildSearchIndex();
-
-                console.log('City data loaded: ' + allCities.length + ' cities (' + featuredCities.length + ' featured, ' + regionalCities.length + ' regional)');
-
+                console.log('City data loaded via fetch: ' + allCities.length + ' cities');
                 if (callback) callback();
             })
             .catch(function (err) {
-                console.warn('Failed to load cities.json, using embedded data:', err.message);
-                // Fallback: try to use the old CITY_DATA if available
+                console.warn('Failed to load cities.json:', err.message);
                 if (window.CITY_DATA) {
                     loadFromLegacyData();
                     if (callback) callback();
