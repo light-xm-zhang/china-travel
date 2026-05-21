@@ -1,0 +1,21 @@
+# ============================================================================
+# China Travel Guide — Guestbook Worker Configuration
+# ============================================================================
+name = "china-travel-guestbook"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+# ── D1 Database ─────────────────────────────────────────────────────────────
+# 1. Create:  npx wrangler d1 create china-travel-db
+# 2. Paste the returned database_id below:
+[[d1_databases]]
+binding = "DB"
+database_name = "china-travel-db"
+database_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"  # ← Replace with your DB ID
+
+# ── Secrets (set via CLI, NEVER commit to git) ──────────────────────────────
+#   Optional: npx wrangler secret put ADMIN_PASSWORD
+#   (legacy — password is now stored in D1, default: "server", changeable in admin panel)
+
+# ── Deploy ──────────────────────────────────────────────────────────────────
+#   npx wrangler deploy

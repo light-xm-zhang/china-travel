@@ -1,0 +1,237 @@
+/* ==========================================================================
+   Ultimate China Travel Guide — Custom Styles
+   Complements Tailwind CSS CDN
+   ========================================================================== */
+
+/* --- Base & Typography --- */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* --- Animations --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.6s ease-out forwards;
+}
+
+/* --- Navbar scroll effect --- */
+#navbar.scrolled {
+    background: rgba(17, 24, 39, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+/* --- Hero decorative elements --- */
+.hero-mountain {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 200px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 200' preserveAspectRatio='none'%3E%3Cpath d='M0,200 L0,150 Q100,50 200,120 Q300,20 400,100 Q500,30 600,90 Q700,20 800,80 Q900,10 1000,70 Q1100,30 1200,100 L1200,200 Z' fill='%23ffffff' opacity='0.03'/%3E%3C/svg%3E") no-repeat bottom / 100% auto;
+}
+
+/* --- Smooth transitions for cards --- */
+.city-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.city-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.15);
+}
+
+/* --- Custom scrollbar for sticky nav --- */
+#jump-nav::-webkit-scrollbar {
+    height: 4px;
+}
+
+#jump-nav::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#jump-nav::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 2px;
+}
+
+/* --- Focus styles for accessibility --- */
+a:focus-visible,
+button:focus-visible {
+    outline: 2px solid #ef4444;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* --- Selection color --- */
+::selection {
+    background: #fecaca;
+    color: #991b1b;
+}
+
+/* --- Mobile menu transitions --- */
+#mobile-menu {
+    animation: fadeIn 0.2s ease-out;
+}
+
+/* --- Tab system for city details --- */
+.tab-btn-active {
+    color: #dc2626 !important;
+    border-bottom-color: #dc2626 !important;
+    background-color: rgba(254, 226, 226, 0.5) !important;
+}
+
+.tab-panel {
+    animation: fadeIn 0.25s ease-out;
+}
+
+/* --- China overview map --- */
+#china-overview-map {
+    background: #e8ecf1;
+}
+
+#china-overview-map .leaflet-interactive {
+    cursor: pointer;
+}
+
+/* Province tooltip style */
+.province-tooltip {
+    background: rgba(31, 41, 55, 0.9) !important;
+    border: none !important;
+    border-radius: 6px !important;
+    color: #fff !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    padding: 4px 10px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+}
+
+.province-tooltip::before {
+    border-top-color: rgba(31, 41, 55, 0.9) !important;
+}
+
+/* --- Leaflet map containers --- */
+.leaflet-map-container {
+    width: 100%;
+    min-height: 380px;
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.leaflet-map-container .leaflet-control-zoom a {
+    color: #374151 !important;
+}
+
+/* Fix Leaflet z-index stacking with fixed navbar */
+.leaflet-top,
+.leaflet-bottom {
+    z-index: 30 !important;
+}
+
+/* --- Back to Top Button --- */
+.back-to-top-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 50;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #1f2937;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2), 0 0 0 2px rgba(255,255,255,0.1);
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.back-to-top-btn.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.back-to-top-btn:hover {
+    background: #374151;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.back-to-top-btn:active {
+    transform: translateY(0);
+}
+
+/* --- Filter Chips --- */
+.filter-chip-active,
+.tag-chip-active {
+    background: #fef2f2 !important;
+    color: #dc2626 !important;
+    font-weight: 600 !important;
+}
+
+/* --- Search Input --- */
+#search-input:focus {
+    outline: none;
+}
+
+#search-results::-webkit-scrollbar {
+    width: 4px;
+}
+#search-results::-webkit-scrollbar-thumb {
+    background: #e5e7eb;
+    border-radius: 2px;
+}
+
+/* --- City card line clamp --- */
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* --- Pagination button --- */
+#pagination-controls button {
+    transition: all 0.15s ease;
+}
+
+/* --- Reduce motion for accessibility --- */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    html {
+        scroll-behavior: auto;
+    }
+}

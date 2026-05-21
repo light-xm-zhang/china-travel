@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore China's top destinations with interactive maps, attractions, food guides, and local transport tips — Beijing, Shanghai, Xi'an, Chengdu, Guilin, Xiamen, Hangzhou, Zhangjiajie and more.">
+    <title>City Guides — Ultimate China Travel Guide 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans antialiased">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 bg-gray-900/95 backdrop-blur-sm shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="index.html" class="flex items-center space-x-2">
+                    <span class="text-2xl">🏯</span>
+                    <span class="font-bold text-lg text-white">China Travel Guide</span>
+                </a>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="index.html" class="text-gray-300 hover:text-white font-medium transition-colors">Home</a>
+                    <a href="essentials.html" class="text-gray-300 hover:text-white font-medium transition-colors">Pre-Trip Prep</a>
+                    <a href="cities.html" class="text-white font-medium transition-colors border-b-2 border-red-500 pb-0.5">City Guides</a>
+                    <a href="guestbook.html" class="text-gray-300 hover:text-white font-medium transition-colors">Guestbook</a>
+                    <button id="search-toggle" class="ml-2 p-2 text-gray-300 hover:text-white transition-colors rounded-lg hover:bg-white/10" aria-label="Search cities" title="Search (Ctrl+K)">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </button>
+                </div>
+                <div class="flex items-center gap-2 md:hidden">
+                    <button id="search-toggle-mobile" class="p-2 text-white hover:bg-white/10 rounded-lg" aria-label="Search">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </button>
+                    <button id="menu-btn" class="text-white p-2" aria-label="Toggle menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path id="menu-icon-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        <path id="menu-icon-close" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div id="mobile-menu" class="md:hidden hidden pb-4">
+                <a href="index.html" class="block py-2 text-gray-300 hover:text-white font-medium">Home</a>
+                <a href="essentials.html" class="block py-2 text-gray-300 hover:text-white font-medium">Pre-Trip Prep</a>
+                <a href="cities.html" class="block py-2 text-white font-medium">City Guides</a>
+                <a href="guestbook.html" class="block py-2 text-gray-300 hover:text-white font-medium">Guestbook</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="pt-28 pb-12 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <span class="inline-block px-4 py-1.5 bg-amber-600/20 text-amber-300 text-sm font-medium rounded-full border border-amber-500/20 mb-4">Explore Destinations</span>
+            <h1 class="text-3xl sm:text-5xl font-bold text-white mb-4">City & Culture Guides</h1>
+            <p class="text-gray-400 max-w-2xl mx-auto text-lg">Click a province on the <strong>interactive map</strong> to discover cities, attractions, food guides, and local transport tips.</p>
+        </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- Interactive China Map — Primary Navigation -->
+    <!-- ================================================================= -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+            <!-- Map Header -->
+            <div class="px-5 py-3.5 border-b border-gray-100 flex items-center justify-between flex-wrap gap-2">
+                <div>
+                    <h2 class="font-bold text-gray-900 text-base sm:text-lg">🗺️ Click a Province to Explore</h2>
+                    <p class="text-xs text-gray-500">Each province links to city guides with attractions, food, interactive maps & transport tips.</p>
+                </div>
+                <button onclick="resetChinaMap()" class="text-xs text-red-600 font-medium hover:text-red-800 transition-colors px-3 py-1 bg-red-50 rounded-full">
+                    ↺ Reset Map
+                </button>
+            </div>
+            <!-- Map Canvas -->
+            <div id="china-overview-map" class="w-full" style="height: 500px; background: #e8ecf1; position: relative;">
+                <div id="map-loading" class="absolute inset-0 flex items-center justify-center text-gray-400 text-sm z-10 pointer-events-none">Loading map data...</div>
+            </div>
+            <!-- Quick-Select Chips -->
+            <div class="border-t border-gray-100 px-4 py-3 flex flex-wrap items-center gap-2 overflow-x-auto">
+                <span class="text-xs text-gray-400 flex-shrink-0">Quick Select:</span>
+                <div id="map-quick-chips" class="flex flex-wrap gap-2">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Province Click Result Panel -->
+    <section id="province-result" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 hidden"></section>
+
+    <!-- Search Modal -->
+    <div id="search-modal" class="hidden fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-start justify-center pt-24 px-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
+            <div class="flex items-center gap-3 px-5 py-4 border-b border-gray-100">
+                <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <input id="search-input" type="text" placeholder="Search cities, provinces, attractions..." class="w-full text-sm outline-none py-1" autocomplete="off">
+                <button id="search-close" class="text-gray-400 hover:text-gray-600 p-1">✕</button>
+            </div>
+            <div id="search-results" class="max-h-80 overflow-y-auto"><p class="text-gray-400 text-sm text-center py-6">Type a city, province, or attraction name...</p></div>
+            <div class="px-4 py-2 border-t border-gray-100 text-[10px] text-gray-400 text-center">Press <kbd class="px-1 py-0.5 bg-gray-100 rounded text-xs">ESC</kbd> to close · <kbd class="px-1 py-0.5 bg-gray-100 rounded text-xs">Ctrl+K</kbd> to open</div>
+        </div>
+    </div>
+
+    <!-- Filter Controls + City List -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="text-center mb-6">
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">All Destinations</h2>
+            <p class="text-gray-500 text-sm">54 cities across every province. <strong>Filter by region or theme</strong>, or use the interactive map above.</p>
+        </div>
+        <!-- Filter Chips -->
+        <div id="filter-controls" class="bg-white rounded-xl border border-gray-200 p-4 mb-6 shadow-sm"></div>
+        <!-- Filtered City Cards -->
+        <div id="city-filtered-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4"></div>
+        <!-- Pagination -->
+        <div id="pagination-controls" class="text-center py-4"></div>
+    </section>
+
+    <!-- City Detail Sections Container (Featured Cities) -->
+    <div id="city-details-container"></div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-10 mb-12">
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-4"><span>🏯</span> China Travel Guide</h4>
+                    <p class="text-sm leading-relaxed">A curated, practical travel guide for international visitors. Updated for 2026.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html" class="hover:text-white transition-colors">Home</a></li>
+                        <li><a href="essentials.html" class="hover:text-white transition-colors">Pre-Trip Preparation</a></li>
+                        <li><a href="cities.html" class="hover:text-white transition-colors">City & Culture Guides</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.trip.com" target="_blank" rel="noopener" class="hover:text-white transition-colors">Trip.com — Book travel</a></li>
+                        <li><a href="https://www.chinadiscovery.com" target="_blank" rel="noopener" class="hover:text-white transition-colors">China Discovery — Tours</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-sm space-y-2">
+                <p>&copy; 2026 Ultimate China Travel Guide. All rights reserved.</p>
+                <p class="text-gray-500">Disclaimer: This guide provides general travel information. Always verify with official sources before traveling.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/cities-search.js"></script>
+    <script src="js/cities-render.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

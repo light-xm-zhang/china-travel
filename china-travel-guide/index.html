@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Ultimate China Travel Guide 2026 — Your complete companion for visiting China. Visa-free policies, essential apps, city guides, and local tips.">
+    <title>Ultimate China Travel Guide 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans antialiased">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300" data-transparent="true">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="index.html" class="flex items-center space-x-2">
+                    <span class="text-2xl">🏯</span>
+                    <span class="font-bold text-lg text-white">China Travel Guide</span>
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-white/90 hover:text-white font-medium transition-colors">Home</a>
+                    <a href="essentials.html" class="text-white/90 hover:text-white font-medium transition-colors">Pre-Trip Prep</a>
+                    <a href="cities.html" class="text-white/90 hover:text-white font-medium transition-colors">City Guides</a>
+                    <a href="guestbook.html" class="text-white/90 hover:text-white font-medium transition-colors">Guestbook</a>
+                </div>
+                <!-- Mobile menu button -->
+                <button id="menu-btn" class="md:hidden text-white p-2" aria-label="Toggle menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path id="menu-icon-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        <path id="menu-icon-close" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="md:hidden hidden pb-4">
+                <a href="index.html" class="block py-2 text-white/90 hover:text-white font-medium">Home</a>
+                <a href="essentials.html" class="block py-2 text-white/90 hover:text-white font-medium">Pre-Trip Prep</a>
+                <a href="cities.html" class="block py-2 text-white/90 hover:text-white font-medium">City Guides</a>
+                <a href="guestbook.html" class="block py-2 text-white/90 hover:text-white font-medium">Guestbook</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #533a24 75%, #1a1a2e 100%);">
+        <!-- Decorative mountain silhouette -->
+        <div class="absolute bottom-0 left-0 right-0 h-64 opacity-20" style="background: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1200 200%22 preserveAspectRatio=%22none%22><path d=%22M0,200 L0,150 Q100,50 200,120 Q300,20 400,100 Q500,30 600,90 Q700,20 800,80 Q900,10 1000,70 Q1100,30 1200,100 L1200,200 Z%22 fill=%22%23ffffff%22 opacity=%220.05%22/></svg>') no-repeat bottom/100% auto;"></div>
+        <!-- Floating particles -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute top-1/4 left-1/4 w-2 h-2 bg-amber-400/30 rounded-full animate-pulse"></div>
+            <div class="absolute top-1/3 right-1/3 w-1.5 h-1.5 bg-red-400/30 rounded-full animate-pulse" style="animation-delay: 1s;"></div>
+            <div class="absolute bottom-1/3 left-1/2 w-1 h-1 bg-amber-300/30 rounded-full animate-pulse" style="animation-delay: 2s;"></div>
+        </div>
+
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+            <div class="mb-6 animate-fade-in">
+                <span class="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-sm text-amber-300 text-sm font-medium rounded-full border border-white/10">
+                    2026 Edition — Visa-Free & Easier Than Ever
+                </span>
+            </div>
+            <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white leading-tight mb-6 tracking-tight">
+                Discover the
+                <span class="bg-gradient-to-r from-amber-400 to-red-400 bg-clip-text text-transparent">Wonders of China</span>
+            </h1>
+            <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed">
+                Your ultimate companion for exploring China — from the Great Wall to the karst peaks of Guilin. Practical tips, city guides, and everything you need for an unforgettable journey.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="cities.html" class="px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 text-white font-semibold rounded-xl shadow-lg shadow-red-600/25 hover:shadow-red-600/40 hover:-translate-y-0.5 transition-all duration-300 text-lg">
+                    Start Exploring
+                </a>
+                <a href="essentials.html" class="px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-300 text-lg">
+                    Pre-Trip Essentials
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+            <svg class="w-6 h-6 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Stats Banner -->
+    <section class="bg-white border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-3xl font-bold text-red-600">50+</div>
+                    <div class="text-sm text-gray-500 mt-1">Visa-Free Countries</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-red-600">240h</div>
+                    <div class="text-sm text-gray-500 mt-1">Transit Visa-Free</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-red-600">24</div>
+                    <div class="text-sm text-gray-500 mt-1">Provinces Open</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-red-600">50+</div>
+                    <div class="text-sm text-gray-500 mt-1">Curated Cities</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Navigation Cards -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div class="text-center mb-14">
+            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Plan Your Journey</h2>
+            <p class="text-gray-500 max-w-2xl mx-auto text-lg">Everything you need to know before and during your trip to China, all in one place.</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Card 1: Pre-Trip -->
+            <a href="essentials.html" class="group block p-8 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center mb-5 group-hover:bg-red-100 transition-colors">
+                    <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Pre-Trip Preparation</h3>
+                <p class="text-gray-500 leading-relaxed">Visa-free policies, payment setup, must-have apps, and everything to prepare before you fly.</p>
+                <span class="inline-flex items-center mt-4 text-red-600 font-medium text-sm group-hover:gap-2 transition-all">
+                    Read More
+                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </span>
+            </a>
+            <!-- Card 2: City Guides -->
+            <a href="cities.html" class="group block p-8 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="w-14 h-14 bg-amber-50 rounded-xl flex items-center justify-center mb-5 group-hover:bg-amber-100 transition-colors">
+                    <svg class="w-7 h-7 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">City & Culture Guides</h3>
+                <p class="text-gray-500 leading-relaxed">Explore 8 iconic destinations — Beijing, Shanghai, Xi'an, Chengdu, Guilin, Xiamen, and more.</p>
+                <span class="inline-flex items-center mt-4 text-amber-600 font-medium text-sm group-hover:gap-2 transition-all">
+                    Explore Cities
+                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </span>
+            </a>
+            <!-- Card 3: Travel Tips -->
+            <a href="essentials.html#transport" class="group block p-8 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center mb-5 group-hover:bg-blue-100 transition-colors">
+                    <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Travel Smart Tips</h3>
+                <p class="text-gray-500 leading-relaxed">Transportation, navigation, language tips, local etiquette, and money-saving strategies.</p>
+                <span class="inline-flex items-center mt-4 text-blue-600 font-medium text-sm group-hover:gap-2 transition-all">
+                    Get Tips
+                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Featured Cities Preview -->
+    <section class="bg-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-14">
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Where Will You Go?</h2>
+                <p class="text-gray-500 max-w-2xl mx-auto text-lg">From ancient capitals to futuristic skylines — China is a land of breathtaking contrasts.</p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+                <div class="group relative overflow-hidden rounded-2xl aspect-[3/4] bg-gradient-to-b from-red-900/80 to-red-950 flex items-end p-5 cursor-pointer hover:scale-[1.02] transition-transform duration-300">
+                    <div class="absolute inset-0 bg-[url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%22 y=%2240%22 text-anchor=%22middle%22 fill=%22white%22 opacity=%220.1%22 font-size=%228%22>🏯</text><text x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22white%22 opacity=%220.3%22 font-size=%2260%22>京</text></svg>')] bg-cover opacity-50"></div>
+                    <div class="relative z-10">
+                        <h3 class="text-xl font-bold text-white mb-1">Beijing</h3>
+                        <p class="text-white/70 text-sm">The Imperial Capital</p>
+                    </div>
+                </div>
+                <div class="group relative overflow-hidden rounded-2xl aspect-[3/4] bg-gradient-to-b from-blue-900/80 to-blue-950 flex items-end p-5 cursor-pointer hover:scale-[1.02] transition-transform duration-300">
+                    <div class="absolute inset-0 bg-[url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22white%22 opacity=%220.3%22 font-size=%2260%22>沪</text></svg>')] bg-cover opacity-50"></div>
+                    <div class="relative z-10">
+                        <h3 class="text-xl font-bold text-white mb-1">Shanghai</h3>
+                        <p class="text-white/70 text-sm">The Pearl of the Orient</p>
+                    </div>
+                </div>
+                <div class="group relative overflow-hidden rounded-2xl aspect-[3/4] bg-gradient-to-b from-amber-900/80 to-amber-950 flex items-end p-5 cursor-pointer hover:scale-[1.02] transition-transform duration-300">
+                    <div class="absolute inset-0 bg-[url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22white%22 opacity=%220.3%22 font-size=%2260%22>秦</text></svg>')] bg-cover opacity-50"></div>
+                    <div class="relative z-10">
+                        <h3 class="text-xl font-bold text-white mb-1">Xi'an</h3>
+                        <p class="text-white/70 text-sm">Ancient Silk Road Gateway</p>
+                    </div>
+                </div>
+                <div class="group relative overflow-hidden rounded-2xl aspect-[3/4] bg-gradient-to-b from-green-900/80 to-green-950 flex items-end p-5 cursor-pointer hover:scale-[1.02] transition-transform duration-300">
+                    <div class="absolute inset-0 bg-[url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22white%22 opacity=%220.3%22 font-size=%2260%22>桂</text></svg>')] bg-cover opacity-50"></div>
+                    <div class="relative z-10">
+                        <h3 class="text-xl font-bold text-white mb-1">Guilin</h3>
+                        <p class="text-white/70 text-sm">Landscape Paintings Come Alive</p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-10">
+                <a href="cities.html" class="inline-flex items-center px-6 py-3 bg-gray-900 text-white font-medium rounded-xl hover:bg-gray-800 transition-colors">
+                    View All 54 Cities
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <section class="py-20" style="background: linear-gradient(135deg, #b91c1c 0%, #991b1b 50%, #7f1d1d 100%);">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">China Is Ready for You</h2>
+            <p class="text-red-100 text-lg mb-8 max-w-2xl mx-auto">With expanded visa-free policies and better infrastructure for international travelers, there has never been a better time to visit.</p>
+            <a href="essentials.html" class="inline-flex items-center px-8 py-4 bg-white text-red-700 font-semibold rounded-xl hover:bg-amber-50 hover:-translate-y-0.5 transition-all duration-300 shadow-lg">
+                Start Planning Your Trip
+                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-10 mb-12">
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-4 flex items-center gap-2">
+                        <span>🏯</span> China Travel Guide
+                    </h4>
+                    <p class="text-sm leading-relaxed">A curated, practical travel guide for international visitors exploring China. Updated for the 2026 travel season with the latest visa policies and local insights.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html" class="hover:text-white transition-colors">Home</a></li>
+                        <li><a href="essentials.html" class="hover:text-white transition-colors">Pre-Trip Preparation</a></li>
+                        <li><a href="cities.html" class="hover:text-white transition-colors">City & Culture Guides</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Important Resources</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://www.trip.com" target="_blank" rel="noopener" class="hover:text-white transition-colors">Trip.com — Book trains & hotels</a></li>
+                        <li><a href="https://www.chinadiscovery.com" target="_blank" rel="noopener" class="hover:text-white transition-colors">China Discovery — Tours & info</a></li>
+                        <li><a href="https://english.www.gov.cn" target="_blank" rel="noopener" class="hover:text-white transition-colors">Official China Government Portal</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-sm space-y-2">
+                <p>&copy; 2026 Ultimate China Travel Guide. All rights reserved.</p>
+                <p class="text-gray-500">Disclaimer: This guide provides general travel information. Visa policies and local regulations may change. Always verify with your local Chinese embassy or consulate before traveling. This site is not affiliated with any government agency.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

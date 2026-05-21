@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>Admin Panel — Guestbook</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        .tab-btn { transition: all 0.15s ease; }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-gray-900 text-white py-4 px-6">
+        <div class="max-w-5xl mx-auto flex items-center justify-between">
+            <h1 class="text-lg font-bold">🏯 Guestbook Admin</h1>
+            <div class="flex items-center gap-3">
+                <span id="login-status" class="text-xs text-gray-400">Not logged in</span>
+                <button onclick="doLogin()" id="login-btn" class="px-3 py-1.5 bg-red-600 text-white text-xs rounded-lg hover:bg-red-700">Login</button>
+                <a href="guestbook.html" class="text-xs text-gray-400 hover:text-white">← Site</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto p-4 sm:p-6 space-y-6">
+
+        <!-- First-Run Setup Panel (no password set yet) -->
+        <div id="setup-panel" class="hidden bg-white rounded-xl border border-gray-200 shadow-sm p-6 max-w-sm mx-auto mt-12">
+            <div class="text-center mb-4">
+                <span class="text-4xl">🔐</span>
+                <h2 class="font-bold text-lg mt-2">First-Time Setup</h2>
+                <p class="text-xs text-gray-500 mt-1">No admin password has been set yet.<br>Create one now to secure your guestbook.</p>
+            </div>
+            <input type="password" id="setup-password" placeholder="Create admin password (3–64 chars)"
+                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm mb-3 focus:ring-2 focus:ring-red-500 outline-none"
+                onkeydown="if(event.key==='Enter')doSetup()">
+            <button onclick="doSetup()" class="w-full py-2.5 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700">Create Password & Enter</button>
+            <p id="setup-status" class="hidden text-xs mt-3"></p>
+        </div>
+
+        <!-- Login Panel (password already set) -->
+        <div id="login-panel" class="hidden bg-white rounded-xl border border-gray-200 shadow-sm p-6 max-w-sm mx-auto mt-12">
+            <h2 class="font-bold text-lg mb-3">Admin Login</h2>
+            <input type="password" id="admin-password" placeholder="Enter admin password"
+                class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm mb-3 focus:ring-2 focus:ring-red-500 outline-none"
+                onkeydown="if(event.key==='Enter')doLogin()">
+            <button onclick="doLogin()" class="w-full py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-lg hover:bg-gray-800">Login</button>
+            <p id="login-error" class="hidden text-xs text-red-500 mt-2"></p>
+        </div>
+
+        <!-- Main Panel (hidden until logged in) -->
+        <div id="main-panel" class="hidden space-y-6">
+
+            <!-- Tabs -->
+            <div class="flex gap-1 bg-white rounded-xl border border-gray-200 p-1 shadow-sm">
+                <button onclick="switchTab('config')" data-tab="config" class="tab-btn flex-1 py-2.5 text-sm font-semibold rounded-lg bg-red-50 text-red-700">⚙️ Settings</button>
+                <button onclick="switchTab('messages')" data-tab="messages" class="tab-btn flex-1 py-2.5 text-sm font-semibold rounded-lg text-gray-500 hover:bg-gray-50">💬 Messages</button>
+            </div>
+
+            <!-- Config Tab -->
+            <div id="tab-config" class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                <h2 class="font-bold text-lg mb-4">Email Configuration</h2>
+                <p class="text-xs text-gray-500 mb-5">
+                    Uses <strong>MailChannels</strong> (free, no registration). Make sure your sender domain has an SPF record including <code class="bg-gray-100 px-1 rounded">include:mailchannels.net</code>.
+                </p>
+
+                <form id="config-form" class="space-y-4 max-w-lg">
+                    <div class="flex items-center justify-between">
+                        <label class="text-sm font-semibold text-gray-700">Enable Email Notifications</label>
+                        <button type="button" id="toggle-email" onclick="toggleEmailEnabled()"
+                            class="w-11 h-6 rounded-full bg-gray-300 relative transition-colors">
+                            <span class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform"></span>
+                        </button>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Receiver Email</label>
+                        <input type="email" id="cfg-receiver" placeholder="your@email.com"
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:ring-2 focus:ring-red-500 outline-none">
+                        <p class="text-xs text-gray-400 mt-1">Where new-message notifications are sent.</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Sender Email</label>
+                        <input type="email" id="cfg-sender-email" placeholder="guestbook@yourdomain.com"
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:ring-2 focus:ring-red-500 outline-none">
+                        <p class="text-xs text-gray-400 mt-1">Must be from a domain with SPF <code>include:mailchannels.net</code>.</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Sender Display Name</label>
+                        <input type="text" id="cfg-sender-name" placeholder="China Travel Guide"
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:ring-2 focus:ring-red-500 outline-none">
+                    </div>
+                    <button type="submit" class="w-full py-2.5 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition-colors">💾 Save Settings</button>
+                </form>
+                <div id="config-status" class="hidden text-sm rounded-lg p-3 mt-3"></div>
+
+                <hr class="my-6 border-gray-200">
+                <h3 class="font-bold text-gray-900 mb-3">🔑 Change Admin Password</h3>
+                <div class="space-y-3 max-w-sm">
+                    <input type="password" id="new-password" placeholder="New password (3–64 chars)"
+                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:ring-2 focus:ring-red-500 outline-none">
+                    <button onclick="changePassword()" class="w-full py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-lg hover:bg-gray-800">Update Password</button>
+                    <p id="password-status" class="hidden text-xs"></p>
+                </div>
+            </div>
+
+            <!-- Messages Tab -->
+            <div id="tab-messages" class="hidden bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="font-bold text-lg">Messages</h2>
+                    <button onclick="loadMessages()" class="text-xs px-3 py-1.5 bg-gray-100 rounded-lg hover:bg-gray-200">🔄 Refresh</button>
+                </div>
+                <div id="admin-messages-list" class="space-y-4">
+                    <p class="text-gray-400 text-sm text-center py-8">Loading...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+    // ── Config ──────────────────────────────────────────────────────────────
+    const API_BASE = 'https://china-travel-guestbook.YOUR_SUBDOMAIN.workers.dev';
+    let adminToken = sessionStorage.getItem('gb_admin_token') || '';
+    let allSettings = {};
+    let emailEnabled = true;
+
+    // ── DOM refs ────────────────────────────────────────────────────────────
+    const setupPanel = document.getElementById('setup-panel');
+    const loginPanel = document.getElementById('login-panel');
+    const mainPanel = document.getElementById('main-panel');
+    const loginStatus = document.getElementById('login-status');
+    const loginBtn = document.getElementById('login-btn');
+
+    // ── Check if first-run (no password set) ───────────────────────────────
+    async function checkAuthStatus() {
+        try {
+            const r = await fetch(API_BASE + '/api/auth-status');
+            const data = await r.json();
+            if (data.needsSetup) {
+                // First run: no password → show setup
+                setupPanel.classList.remove('hidden');
+                loginPanel.classList.add('hidden');
+            } else {
+                // Password exists → show login
+                setupPanel.classList.add('hidden');
+                loginPanel.classList.remove('hidden');
+            }
+        } catch (e) {
+            // Network error → show login as fallback
+            setupPanel.classList.add('hidden');
+            loginPanel.classList.remove('hidden');
+        }
+    }
+
+    // ── First-run Setup ────────────────────────────────────────────────────
+    async function doSetup() {
+        const pw = document.getElementById('setup-password').value.trim();
+        const status = document.getElementById('setup-status');
+        if (pw.length < 3) {
+            status.textContent = 'Minimum 3 characters.';
+            status.className = 'text-xs text-red-500'; status.classList.remove('hidden');
+            return;
+        }
+        try {
+            // No password set, so no auth header needed
+            const r = await fetch(API_BASE + '/api/change-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ new_password: pw })
+            });
+            if (r.ok) {
+                adminToken = pw;
+                sessionStorage.setItem('gb_admin_token', pw);
+                setupPanel.classList.add('hidden');
+                mainPanel.classList.remove('hidden');
+                loginStatus.textContent = 'Logged in';
+                loginStatus.className = 'text-xs text-green-400';
+                loginBtn.textContent = 'Logout';
+                loginBtn.onclick = doLogout;
+                loadSettings();
+                loadMessages();
+            } else {
+                const d = await r.json();
+                status.textContent = d.error || 'Failed';
+                status.className = 'text-xs text-red-500'; status.classList.remove('hidden');
+            }
+        } catch (e) {
+            status.textContent = 'Network error. Is the backend running?';
+            status.className = 'text-xs text-red-500'; status.classList.remove('hidden');
+        }
+    }
+
+    // ── Login ──────────────────────────────────────────────────────────────
+    function doLogin() {
+        const pw = document.getElementById('admin-password').value.trim();
+        const errEl = document.getElementById('login-error');
+        if (!pw) { errEl.textContent = 'Enter password.'; errEl.classList.remove('hidden'); return; }
+        adminToken = pw;
+        testAuth().then(ok => {
+            if (ok) {
+                sessionStorage.setItem('gb_admin_token', pw);
+                loginPanel.classList.add('hidden');
+                mainPanel.classList.remove('hidden');
+                loginStatus.textContent = 'Logged in';
+                loginStatus.className = 'text-xs text-green-400';
+                loginBtn.textContent = 'Logout';
+                loginBtn.onclick = doLogout;
+                document.getElementById('admin-password').value = '';
+                errEl.classList.add('hidden');
+                loadSettings();
+                loadMessages();
+            } else {
+                errEl.textContent = 'Incorrect password.';
+                errEl.classList.remove('hidden');
+                adminToken = '';
+                sessionStorage.removeItem('gb_admin_token');
+            }
+        });
+    }
+    function doLogout() {
+        adminToken = '';
+        sessionStorage.removeItem('gb_admin_token');
+        mainPanel.classList.add('hidden');
+        checkAuthStatus(); // re-check to show correct panel
+        loginStatus.textContent = 'Not logged in';
+        loginStatus.className = 'text-xs text-gray-400';
+        loginBtn.textContent = 'Login';
+        loginBtn.onclick = doLogin;
+    }
+    async function testAuth() {
+        try {
+            const r = await fetch(API_BASE + '/api/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Admin-Token': adminToken },
+                body: JSON.stringify({})
+            });
+            return r.ok;
+        } catch { return false; }
+    }
+
+    // ── Tabs ────────────────────────────────────────────────────────────────
+    function switchTab(name) {
+        document.querySelectorAll('[data-tab]').forEach(b => b.className = 'tab-btn flex-1 py-2.5 text-sm font-semibold rounded-lg text-gray-500 hover:bg-gray-50');
+        const btn = document.querySelector(`[data-tab="${name}"]`);
+        if (btn) btn.className = 'tab-btn flex-1 py-2.5 text-sm font-semibold rounded-lg bg-red-50 text-red-700';
+        document.getElementById('tab-config').classList.toggle('hidden', name !== 'config');
+        document.getElementById('tab-messages').classList.toggle('hidden', name !== 'messages');
+    }
+
+    // ── Settings ────────────────────────────────────────────────────────────
+    async function loadSettings() {
+        try {
+            const r = await fetch(API_BASE + '/api/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Admin-Token': adminToken },
+                body: JSON.stringify({})
+            });
+            const data = await r.json();
+            allSettings = data.settings || {};
+            document.getElementById('cfg-receiver').value = allSettings.receiver_email || '';
+            document.getElementById('cfg-sender-email').value = allSettings.sender_email || '';
+            document.getElementById('cfg-sender-name').value = allSettings.sender_name || '';
+            emailEnabled = allSettings.email_enabled === 'true';
+            updateToggle();
+        } catch (e) { console.error('loadSettings:', e); }
+    }
+
+    function toggleEmailEnabled() {
+        emailEnabled = !emailEnabled;
+        updateToggle();
+    }
+    function updateToggle() {
+        const toggle = document.getElementById('toggle-email');
+        if (emailEnabled) {
+            toggle.className = 'w-11 h-6 rounded-full bg-green-500 relative transition-colors';
+            toggle.querySelector('span').style.transform = 'translateX(20px)';
+        } else {
+            toggle.className = 'w-11 h-6 rounded-full bg-gray-300 relative transition-colors';
+            toggle.querySelector('span').style.transform = 'translateX(0)';
+        }
+    }
+
+    document.getElementById('config-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const body = {
+            receiver_email: document.getElementById('cfg-receiver').value.trim(),
+            sender_email: document.getElementById('cfg-sender-email').value.trim(),
+            sender_name: document.getElementById('cfg-sender-name').value.trim(),
+            email_enabled: emailEnabled,
+        };
+        try {
+            const r = await fetch(API_BASE + '/api/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Admin-Token': adminToken },
+                body: JSON.stringify(body)
+            });
+            const data = await r.json();
+            const status = document.getElementById('config-status');
+            status.classList.remove('hidden');
+            if (r.ok) {
+                allSettings = data.settings;
+                status.className = 'text-sm rounded-lg p-3 bg-green-50 text-green-700 border border-green-200';
+                status.textContent = '✅ Settings saved.';
+            } else {
+                status.className = 'text-sm rounded-lg p-3 bg-red-50 text-red-700 border border-red-200';
+                status.textContent = '❌ ' + (data.error || 'Failed');
+            }
+        } catch (e) {
+            alert('Network error: ' + e.message);
+        }
+    });
+
+    // ── Messages ───────────────────────────────────────────────────────────
+    async function loadMessages() {
+        const container = document.getElementById('admin-messages-list');
+        try {
+            const r = await fetch(API_BASE + '/api/messages');
+            const data = await r.json();
+            if (!data.messages || data.messages.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-center py-8">No messages yet.</p>';
+                return;
+            }
+            container.innerHTML = data.messages.map(m => `
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="font-semibold text-sm">${esc(m.name)}</span>
+                        <span class="text-xs text-gray-400">${fmt(m.created_at)}</span>
+                    </div>
+                    <p class="text-sm text-gray-700 whitespace-pre-wrap mb-3">${esc(m.content)}</p>
+                    ${m.admin_reply ? `
+                    <div class="ml-2 pl-3 border-l-2 border-green-300 bg-green-50 rounded p-2 mb-2">
+                        <span class="text-xs text-green-600 font-semibold">✅ Replied (${fmt(m.replied_at)})</span>
+                        <p class="text-sm text-gray-600 mt-0.5">${esc(m.admin_reply)}</p>
+                    </div>` : ''}
+                    <div class="flex gap-2">
+                        <input type="text" id="reply-input-${m.id}" placeholder="Type reply..."
+                            class="flex-1 px-3 py-1.5 text-xs border border-gray-200 rounded-lg focus:ring-1 focus:ring-red-500 outline-none">
+                        <button onclick="doReply(${m.id})" class="px-3 py-1.5 bg-red-600 text-white text-xs rounded-lg hover:bg-red-700">Reply</button>
+                    </div>
+                </div>
+            `).join('');
+        } catch (e) {
+            container.innerHTML = '<p class="text-red-400 text-center py-8">Failed to load messages.</p>';
+        }
+    }
+
+    async function doReply(id) {
+        const input = document.getElementById('reply-input-' + id);
+        if (!input) return;
+        const reply = input.value.trim();
+        if (!reply) return alert('Enter a reply.');
+        try {
+            const r = await fetch(API_BASE + '/api/reply', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Admin-Token': adminToken },
+                body: JSON.stringify({ id, reply })
+            });
+            if (r.ok) { input.value = ''; loadMessages(); }
+            else { const d = await r.json(); alert(d.error || 'Failed'); }
+        } catch (e) { alert('Network error.'); }
+    }
+
+    async function changePassword() {
+        const input = document.getElementById('new-password');
+        const status = document.getElementById('password-status');
+        const pw = input.value.trim();
+        if (pw.length < 3) { status.textContent = 'Minimum 3 characters.'; status.className = 'text-xs text-red-500'; status.classList.remove('hidden'); return; }
+        try {
+            const r = await fetch(API_BASE + '/api/change-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Admin-Token': adminToken },
+                body: JSON.stringify({ new_password: pw })
+            });
+            if (r.ok) {
+                adminToken = pw;
+                sessionStorage.setItem('gb_admin_token', pw);
+                input.value = '';
+                status.textContent = '✅ Password updated. Use the new password next time you log in.';
+                status.className = 'text-xs text-green-600'; status.classList.remove('hidden');
+            } else {
+                const d = await r.json();
+                status.textContent = '❌ ' + (d.error || 'Failed');
+                status.className = 'text-xs text-red-500'; status.classList.remove('hidden');
+            }
+        } catch (e) { status.textContent = 'Network error.'; status.className = 'text-xs text-red-500'; status.classList.remove('hidden'); }
+    }
+
+    function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+    function fmt(iso) { if (!iso) return ''; return new Date(iso + 'Z').toLocaleString('en-US', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' }); }
+
+    // ── Init ────────────────────────────────────────────────────────────────
+    if (adminToken) {
+        // Try existing token first
+        testAuth().then(ok => {
+            if (ok) {
+                setupPanel.classList.add('hidden');
+                loginPanel.classList.add('hidden');
+                mainPanel.classList.remove('hidden');
+                loginStatus.textContent = 'Logged in';
+                loginStatus.className = 'text-xs text-green-400';
+                loginBtn.textContent = 'Logout';
+                loginBtn.onclick = doLogout;
+                loadSettings();
+                loadMessages();
+            } else {
+                // Stored token invalid — show correct panel
+                adminToken = '';
+                sessionStorage.removeItem('gb_admin_token');
+                checkAuthStatus();
+            }
+        });
+    } else {
+        checkAuthStatus();
+    }
+    mainPanel.classList.add('hidden');
+    </script>
+</body>
+</html>
