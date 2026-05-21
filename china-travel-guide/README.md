@@ -90,6 +90,3 @@ This site is pure HTML/CSS/JS. It runs on any static file host: GitHub Pages, Cl
 
 All content is researched and compiled from publicly available travel resources, official Chinese government announcements, and first-hand traveler reports, current as of May 2026. Visa policies and local regulations may change — always verify with official sources before traveling.
 
-## License
-
-This project is provided for informational purposes only. Not affiliated with any government agency.
