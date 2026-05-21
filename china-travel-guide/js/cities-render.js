@@ -576,25 +576,54 @@
     window.addEventListener('hashchange', handleHashChange);
 
     // =========================================================================
-    // 8. Init
+    // 8. Init — robust: always wait for DOMContentLoaded, with error handling
     // =========================================================================
     function init() {
-        if (!window.CitySearch) { console.error('CitySearch not loaded'); return; }
+        var statusEl = document.getElementById('debug-status');
+        function showStatus(msg, ok) {
+            if (statusEl) {
+                statusEl.textContent = msg;
+                statusEl.className = 'text-xs py-1 px-3 rounded-full ' + (ok ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700');
+            }
+        }
+
+        if (!window.CitySearch) {
+            showStatus('CitySearch module not loaded', false);
+            console.error('CitySearch not loaded');
+            return;
+        }
+
+        showStatus('Loading city data...', true);
+
         window.CitySearch.load(function () {
-            initChinaMap();
-            initSearch();
-            initFilters();
-            renderCityDetails();
-            renderFilteredList();
-            setTimeout(handleHashChange, 500);
+            showStatus('Rendering...', true);
+            try {
+                initChinaMap();
+                initSearch();
+                initFilters();
+                renderCityDetails();
+                renderFilteredList();
+                setTimeout(handleHashChange, 500);
+                showStatus('Ready — ' + CitySearch.getFeatured().length + ' cities', true);
+                console.log('Cities render engine: ' + CitySearch.getFeatured().length + ' featured cities rendered');
+            } catch (e) {
+                showStatus('Render error: ' + e.message, false);
+                console.error('City render error:', e);
+            }
         });
     }
 
+    // Always wait for DOM to be fully ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
-        if (window.CitySearch) { init(); }
-        else { window.addEventListener('load', init); }
+        // DOM already parsed — but still need CitySearch to be loaded
+        // In case this script ran before cities-search.js
+        if (window.CitySearch) {
+            init();
+        } else {
+            document.addEventListener('DOMContentLoaded', init);
+        }
     }
 
     console.log('Cities render engine v3 ready');
