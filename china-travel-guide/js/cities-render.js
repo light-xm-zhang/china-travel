@@ -79,37 +79,78 @@
     function initChinaMap() {
         var mapEl = document.getElementById('china-overview-map');
         if (!mapEl || typeof L === 'undefined') {
-            if (mapEl) mapEl.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400">🗺️ Map loading...</div>';
+            if (mapEl) mapEl.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400">Map loading...</div>';
             return;
         }
         try {
-            chinaOverviewMap = L.map(mapEl, { center: [35.8, 108.5], zoom: 4, minZoom: 3, maxZoom: 8, scrollWheelZoom: true, zoomControl: true, attributionControl: false });
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 8 }).addTo(chinaOverviewMap);
+            // Use same tile source as city maps (proven working)
+            chinaOverviewMap = L.map(mapEl, {
+                center: [35.8, 108.5], zoom: 4, minZoom: 3, maxZoom: 10,
+                scrollWheelZoom: true, zoomControl: true, attributionControl: false
+            });
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 10,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
+            }).addTo(chinaOverviewMap);
+
+            // PRIMARY: Add city markers (always works, no external data needed)
+            addCityMarkers();
+
+            // ENHANCEMENT: Try to load province GeoJSON overlay
             fetch('https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json')
                 .then(function (r) { return r.json(); })
                 .then(function (data) { renderGeoJSON(data); })
-                .catch(function () { document.getElementById('map-loading') && (document.getElementById('map-loading').innerHTML = '<p class="text-gray-400 text-sm">Map data unavailable — use filters below</p>'); });
+                .catch(function () { /* GeoJSON failed — city markers are sufficient */ });
+
+            var loading = document.getElementById('map-loading');
+            if (loading) loading.style.display = 'none';
             renderQuickChips();
         } catch (e) { console.warn('China map error:', e); }
+    }
+
+    // City marker layer (reliable, no external data dependency)
+    function addCityMarkers() {
+        if (!chinaOverviewMap) return;
+        var cities = window.CitySearch ? window.CitySearch.getFeatured() : [];
+        if (cities.length === 0) return;
+        cities.forEach(function (c) {
+            if (!c.map || !c.map.center) return;
+            var marker = L.circleMarker(c.map.center, {
+                radius: 7,
+                fillColor: cityColor(c.regionColor),
+                color: '#fff',
+                weight: 2,
+                fillOpacity: 0.9
+            }).addTo(chinaOverviewMap);
+            marker.bindTooltip(c.emoji + ' ' + c.name, {
+                permanent: false, direction: 'top', className: 'province-tooltip', opacity: 0.9
+            });
+            marker.on('click', function () { jumpToCity(c.id); });
+        });
+    }
+
+    function cityColor(rc) {
+        var m = { red: '#dc2626', blue: '#2563eb', amber: '#d97706', green: '#16a34a',
+                  teal: '#0d9488', cyan: '#0891b2', emerald: '#059669', purple: '#7c3aed',
+                  rose: '#e11d48', sky: '#0284c7', orange: '#ea580c', slate: '#475569',
+                  yellow: '#ca8a04', pink: '#db2777', indigo: '#4f46e5' };
+        return m[rc] || '#dc2626';
     }
 
     function renderGeoJSON(data) {
         if (!chinaOverviewMap) return;
         chinaGeoLayer = L.geoJSON(data, {
-            style: function (f) { return { fillColor: getProvinceColor(f.properties.name), weight: 1.2, color: '#fff', fillOpacity: 0.72 }; },
+            style: function (f) { return { fillColor: getProvinceColor(f.properties.name), weight: 1.2, color: '#fff', fillOpacity: 0.3 }; },
             onEachFeature: function (f, layer) {
                 var name = f.properties.name;
                 layer.on({
                     click: function () { handleProvinceClick(name, layer); },
-                    mouseover: function (e) { e.target.setStyle({ fillOpacity: 0.92, weight: 2.5, color: '#374151' }); e.target.bringToFront(); },
-                    mouseout: function (e) { if (activeProvinceLayer !== e.target) e.target.setStyle({ fillOpacity: 0.72, weight: 1.2, color: '#fff' }); }
+                    mouseover: function (e) { e.target.setStyle({ fillOpacity: 0.6, weight: 2.5 }); },
+                    mouseout: function (e) { if (activeProvinceLayer !== e.target) e.target.setStyle({ fillOpacity: 0.3, weight: 1.2 }); }
                 });
                 layer.bindTooltip(getProvinceDisplay(name), { sticky: true, direction: 'center', className: 'province-tooltip', opacity: 0.9 });
             }
         }).addTo(chinaOverviewMap);
-        try { chinaOverviewMap.fitBounds(chinaGeoLayer.getBounds(), { padding: [20, 20] }); } catch (e) {}
-        var loading = document.getElementById('map-loading');
-        if (loading) loading.style.display = 'none';
     }
 
     function renderQuickChips() {
