@@ -22,7 +22,8 @@
       "PowerShell(try { $r = Invoke-WebRequest -Uri \"http://localhost:8080/js/cities-render.js\" -UseBasicParsing -TimeoutSec 5; Write-Host \"cities-render.js: $\\($r.StatusCode\\) — $\\($r.Content.Length\\) chars\" } catch { Write-Host \"ERROR: $_\" })",
       "PowerShell(try { $r = Invoke-WebRequest -Uri \"http://localhost:8080/js/cities-render.js\" -UseBasicParsing -TimeoutSec 5; Write-Host \"OK — $\\($r.Content.Length\\) chars\" } catch { Write-Host \"ERROR: $_\" })",
       "PowerShell(New-Item -ItemType Directory -Force -Path \"d:\\\\code\\\\china-travel-guide\\\\guestbook\")",
-      "PowerShell(Start-Sleep -Seconds 3; try { $r = Invoke-WebRequest -Uri \"http://localhost:8080/index.html\" -UseBasicParsing -TimeoutSec 5; Write-Host \"OK — Server running. Pages available:\"; @\\(\"index.html\",\"essentials.html\",\"cities.html\",\"guestbook.html\",\"guestbook/admin.html\"\\) | ForEach-Object { try { $resp = Invoke-WebRequest -Uri \"http://localhost:8080/$_\" -UseBasicParsing -TimeoutSec 3; Write-Host \"  ✓ http://localhost:8080/$_\" } catch { Write-Host \"  ✗ $_\" } } } catch { Write-Host \"Server failed to start: $_\" })"
+      "PowerShell(Start-Sleep -Seconds 3; try { $r = Invoke-WebRequest -Uri \"http://localhost:8080/index.html\" -UseBasicParsing -TimeoutSec 5; Write-Host \"OK — Server running. Pages available:\"; @\\(\"index.html\",\"essentials.html\",\"cities.html\",\"guestbook.html\",\"guestbook/admin.html\"\\) | ForEach-Object { try { $resp = Invoke-WebRequest -Uri \"http://localhost:8080/$_\" -UseBasicParsing -TimeoutSec 3; Write-Host \"  ✓ http://localhost:8080/$_\" } catch { Write-Host \"  ✗ $_\" } } } catch { Write-Host \"Server failed to start: $_\" })",
+      "Bash(git ls-tree *)"
     ]
   }
 }
