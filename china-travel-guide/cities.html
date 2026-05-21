@@ -153,8 +153,18 @@
         </div>
     </footer>
 
+    <script>
+    // Step 1: Mark that JS execution has started
+    var dbg = document.getElementById('debug-status');
+    if (dbg) { dbg.textContent = 'JS started...'; dbg.className = 'text-xs py-1 px-3 rounded-full bg-yellow-100 text-yellow-700'; }
+    </script>
     <script src="data/_embed.js"></script>
-    <script>document.getElementById('debug-status')&&(document.getElementById('debug-status').textContent='Embed OK — '+window.__EMBEDDED_CITIES__.length+' cities');</script>
+    <script>
+    // Step 2: Check if embed loaded
+    var dbg2 = document.getElementById('debug-status');
+    var count = (window.__EMBEDDED_CITIES__ && window.__EMBEDDED_CITIES__.length) || 0;
+    if (dbg2) { dbg2.textContent = count ? ('Embed: ' + count + ' cities') : 'Embed FAILED'; dbg2.className = count ? 'text-xs py-1 px-3 rounded-full bg-green-100 text-green-700' : 'text-xs py-1 px-3 rounded-full bg-red-100 text-red-700'; }
+    </script>
     <script src="js/cities-search.js"></script>
     <script src="js/cities-render.js"></script>
     <script src="js/script.js"></script>
